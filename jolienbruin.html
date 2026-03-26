@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jolien Bruin</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:        #0a0a0a;
+      --surface:      #111111;
+      --border:       #222222;
+      --grey:         #666;
+      --grey-light:   #999;
+      --white:        #f7f6f3;
+      --accent:       #00c8ff;
+      --font-body:    'Barlow', sans-serif;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --pad:          40px;
+      --gap:          40px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--white); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 24px var(--pad);
+      background: var(--black);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none; color: var(--white);
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; color: var(--grey); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── SHARED SECTION ── */
+    section { padding: 60px var(--pad); border-bottom: 1px solid var(--border); }
+
+    .section-label {
+      font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 40px;
+    }
+
+    /* ── TWO-COL LAYOUT (shared by all statement rows) ── */
+    .two-col {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--gap);
+    }
+    .two-col .col-left  { flex-shrink: 0; width: 16%; }
+    .two-col .col-right { flex: 1; }
+    .statement-body { margin-left: 15%; }
+
+    /* ── INTRO SECTION (video background) ── */
+    .intro {
+      position: relative;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: flex-end;
+      padding-top: 0;
+    }
+
+    .intro-video-wrap {
+      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .intro-video-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.55));
+      pointer-events: none;
+    }
+    .intro-video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      background: #060d1a; /* blue placeholder */
+      display: block;
+    }
+
+    .intro .two-col {
+      position: relative; z-index: 1;
+      width: 100%;
+      align-items: flex-end;
+    }
+
+    .intro h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(4.8rem, 10vw, 10rem);
+  line-height: 0.92; text-transform: uppercase; color: var(--white);
+  opacity: 0.5;
+    }
+
+    /* ── ABOUT SECTION ── */
+    .about { background: var(--surface); padding-top: 60px; }
+
+    .about h2 {
+      font-family: var(--font-display); font-weight: 600; font-size: 1.6rem;
+      line-height: 1.15; text-transform: uppercase; color: var(--white);
+    }
+    .about p { font-size: 0.95rem; line-height: 1.8; color: #bbb; max-width: 580px; }
+    .about p + p { margin-top: 16px; }
+
+    /* ── WORK ── */
+    #work { background: var(--black); }
+
+    .works-list { display: flex; flex-direction: column; }
+
+    .work-entry { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    .work-entry:last-child { border-bottom: none; }
+
+    .work-series .work-images { display: grid; gap: 15px; align-items: start; }
+    .work-series.two-up .work-images   { grid-template-columns: 1fr 1fr; max-width: 66%; margin: 0 auto; }
+    .work-series.three-up .work-images { grid-template-columns: 1fr 1fr 1fr;}
+
+    .work-solo .work-img-wrap.portrait-wrap  { max-width: 33%; margin: 0 auto; }
+    .work-solo .work-img-wrap.landscape-wrap { max-width: 50%; margin: 0 auto; }
+
+    .work-img-placeholder {
+      width: 100%; aspect-ratio: 4/3; background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-img-placeholder span {
+      font-family: var(--font-display); font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--border);
+    }
+    .work-img {
+      display: block; width: 100%;
+      object-fit: cover; transition: opacity 0.4s;
+    }
+    .work-img.portrait  { aspect-ratio: 3/4; }
+    .work-img.landscape { aspect-ratio: 4/3; }
+    .work-img-wrap:hover .work-img { opacity: 0.85; }
+    .work-img-caption { margin-top: 8px; font-size: 0.78rem; color: var(--grey); letter-spacing: 0.04em; }
+
+    .work-meta {
+      margin-top: 16px;
+      display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+    }
+    .work-title {
+      font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--white);
+    }
+    .work-details { display: flex; gap: 24px; align-items: baseline; flex-wrap: wrap; }
+    .work-detail { font-size: 0.82rem; color: var(--grey-light); letter-spacing: 0.04em; }
+    .work-detail.price  { font-family: var(--font-display); font-size: 0.9rem; color: var(--white); }
+    .work-detail.available {
+      font-family: var(--font-display); font-size: 0.7rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    }
+    .work-detail.sold {
+      font-family: var(--font-display); font-size: 0.7rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.95);
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-img {
+      max-width: 90vw; max-height: 90vh;
+      object-fit: contain;
+      pointer-events: none;
+    }
+    /* placeholder shown when no real image yet */
+    .lightbox-placeholder {
+      width: min(60vw, 400px);
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .lightbox-placeholder span {
+      font-family: var(--font-display); font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--border);
+    }
+    .lightbox-close {
+      position: absolute; top: 24px; right: 32px;
+      font-family: var(--font-display); font-size: 0.75rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); cursor: pointer;
+    }
+    .lightbox-close:hover { color: var(--white); }
+    .work-img-wrap { cursor: zoom-in; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--surface); }
+    #contact .contact-inner { display: flex; justify-content: space-between; align-items: flex-end; }
+    #contact h2 {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 0.95; text-transform: uppercase; color: var(--white);
+    }
+    #contact .contact-links { text-align: right; }
+    #contact .contact-links a {
+      display: block; color: var(--accent); font-size: 0.9rem;
+      letter-spacing: 0.04em; margin-bottom: 6px; transition: color 0.2s;
+    }
+    #contact .contact-links a:hover { color: var(--white); }
+    #contact .contact-links p { font-size: 0.9rem; color: var(--grey); letter-spacing: 0.04em; margin-bottom: 6px; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 20px var(--pad);
+      display: flex; justify-content: space-between;
+      background: var(--black);
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.75rem; color: var(--grey); letter-spacing: 0.06em; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      :root { --pad: 20px; --gap: 20px; }
+      .two-col { flex-direction: column; align-items: flex-start; }
+      .two-col .col-left { width: auto !important; }
+      .statement-body { margin-left: 0 !important; }
+      .intro { aspect-ratio: unset; min-height: 60vw; }
+      .intro .two-col { align-items: flex-start; }
+      .about { padding-top: 80px; } /* clears fixed nav on first visible section */
+      #contact .contact-inner { flex-direction: column; align-items: flex-start; gap: 30px; }
+      #contact .contact-links { text-align: left; }
+      .work-series.two-up .work-images,
+      .work-series.three-up .work-images { grid-template-columns: 1fr; }
+      .work-meta { flex-direction: column; gap: 8px; }
+      footer { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Jolien Bruin</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- INTRO — full-bleed video -->
+  <section class="intro">
+    <div class="intro-video-wrap">
+      <!--
+        TO ADD VIDEO:
+        Direct file  → set src="your-video.mp4" on the <video> tag and remove the background colour from .intro-video in CSS
+        YouTube/Vimeo → replace <video> with their iframe embed
+      -->
+      <video class="intro-video" autoplay muted loop playsinline src="introvideo.mov"></video>
+    </div>
+    <div class="two-col">
+      <div class="col-left">
+        <h2>Jolien<br>Bruin</h2>
+      </div>
+      <div class="col-right statement-body">
+        <p>Architect and visual artist working at the cross section of installation and photography. Temporary spatial interventions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <p class="section-label">About</p>
+    <div class="two-col">
+      <div class="col-left">
+        <h2>Space as<br>instrument.</h2>
+      </div>
+      <div class="col-right statement-body">
+        <p>Spaces aren’t neutral - the body reads them before you think. These works live at the border between the architectural and the abstract. Recognizable enough to trigger instinct, strange enough to refuse resolution.</p> 
+        <p>As an architect I design for safety and comfort. As an artist I make dioramas that have no interest in being either.</p>
+        <p>I build temporary installations, then document them. The materials - cardboard, plastic sheeting, latex and found objects - feel both industrial and anatomical. </p>
+        <p>The resulting spaces are liminal and anonymous, recognisable yet disorienting. They challenge where desire ends and danger begins. They exist at the fringes of reality.</p>
+        <p>Currently completing my visual arts education at <a href="https://mk24.nl" target="_blank">MK Ateliers, Amsterdam →</a></p>
+        <p style="margin-top:24px;font-size:0.82rem;color:var(--grey);">Jolien is also a freelance architect, find her work <a href="https://imagination-station.nl" target="_blank">here →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <p class="section-label">Work</p>
+    <div class="works-list">
+
+      <div class="work-entry work-series three-up">
+        <div class="work-images">
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="EOD1.png" alt="End of District No. 1">
+          </div>
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+            <img class="work-img portrait" src="EOD2.jpg" alt="End of District No. 2">
+          </div>
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+            <img class="work-img portrait" src="EOD3.jpg" alt="End of District No. 3">
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-title">End of District</span>
+          <div class="work-details">
+            <span class="work-detail">Photographs · 2025/ 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-entry work-series two-up">
+        <div class="work-images">
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="object1.jpg" alt="Object at Scale No. 1">
+          </div>
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="object2.jpg" alt="Object at Scale No. 2">
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-title">Dormant Cells</span>
+          <div class="work-details">
+            <span class="work-detail">Photographs · 2025</span>
+            <span class="work-detail">80 × 60 cm each</span>
+            <span class="work-detail">Direct print on alu-dibond</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-entry work-solo">
+        <div class="work-img-wrap landscape-wrap" onclick="openLightbox(this)">
+          <img class="work-img landscape" src="untitled1.JPG" alt="Cold Storage">
+        </div>
+        <div class="work-meta">
+          <span class="work-title">Cold Storage</span>
+          <div class="work-details">
+            <span class="work-detail">Photograph · 2024</span>
+            <span class="work-detail">28 × 20 cm</span>
+            <span class="work-detail">Direct print on alu-dibond</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-entry work-series two-up">
+        <div class="work-images">
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="WIL1.jpg" alt="Object at Scale No. 1">
+            </div>
+          <div class="work-img-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="WIL2.jpg" alt="Object at Scale No. 2">
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-title">Residue Four</span>
+          <div class="work-details">
+            <span class="work-detail">Photographs · 2025</span>
+            <span class="work-detail">40 × 30 cm each</span>
+            <span class="work-detail">Direct print on alu-dibond</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-entry work-solo">
+          <div class="work-img-wrap portrait-wrap" onclick="openLightbox(this)">
+          <img class="work-img portrait" src="blue1.jpg" alt="Object at Scale No. 1">
+          </div>
+        <div class="work-meta">
+          <span class="work-title">Way out here</span>
+          <div class="work-details">
+            <span class="work-detail">Photograph · 2025</span>
+            <span class="work-detail">40 × 30 cm</span>
+            <span class="work-detail">Direct print on alu-dibond</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Contact</p>
+    <div class="contact-inner">
+      <h2>Get<br>in touch.</h2>
+      <div class="contact-links">
+        <p>email coming soon</p>
+        <a href="https://www.instagram.com/_imagination_station_eu/" target="_blank">Instagram →</a>
+        <a href="https://imagination-station.nl" target="_blank">Architecture practice →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Jolien Bruin</p>
+    <p>Amsterdam, NL</p>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">Close ✕</span>
+    <div class="lightbox-inner" id="lightboxInner"></div>
+  </div>
+
+  <script>
+    // Double video speed
+    const introVideo = document.querySelector('.intro-video');
+    if (introVideo) introVideo.playbackRate = 1.0;
+
+    function openLightbox(wrap) {
+      const img = wrap.querySelector('img.work-img');
+      const inner = document.getElementById('lightboxInner');
+      inner.innerHTML = '';
+      if (img) {
+        const el = document.createElement('img');
+        el.src = img.src;
+        el.className = 'lightbox-img';
+        inner.appendChild(el);
+      } else {
+        inner.innerHTML = '<div class="lightbox-placeholder"><span>Image</span></div>';
+      }
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
